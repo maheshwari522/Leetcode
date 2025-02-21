@@ -1,7 +1,7 @@
 class Solution {
     public int orangesRotting(int[][] grid) {
 
-
+//for bfs declare a queue to add every orange that is rotten
         Queue<int[]> q =new LinkedList<>();
 
        
@@ -12,7 +12,7 @@ class Solution {
 
         int fresh = 0;
     
-
+//check for 2 and add to the q and incease the fresh count if orange == 1;
         for(int i = 0;i<rowlength;i++){
             for(int j = 0 ; j<collength ; j++){
                 if(grid[i][j] == 1){
@@ -24,7 +24,7 @@ class Solution {
             }
         }
 
-      
+      //direction for traversing
 
         int[] dx = {-1,0,1,0};
         int[] dy = {0,1,0,-1};
@@ -38,6 +38,8 @@ class Solution {
                 int row = current[0];
                 int col = current[1];
                 int time = current[2];
+
+                //check the time
 
                 maxTime = Math.max(time, maxTime);
 
