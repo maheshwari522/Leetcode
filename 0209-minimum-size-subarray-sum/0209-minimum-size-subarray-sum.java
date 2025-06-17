@@ -9,7 +9,9 @@ class Solution {
         for(int right = 0;right<nums.length;right++){
             currentSum+=nums[right];
             while(currentSum>=target){
-                minLength = Math.min(minLength,right-left);
+                minLength = Math.min(minLength,right-left+1);
+                currentSum-=nums[left];
+                 left++;
             }
 
            
