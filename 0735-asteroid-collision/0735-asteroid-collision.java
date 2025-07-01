@@ -3,30 +3,30 @@ class Solution {
 
         Stack<Integer> st = new Stack<>();
 
-        List<Integer> res = new ArrayList<>();
-
-
-        for(int a:asteroids){
-
-             while (!st.isEmpty() && st.peek() > 0 && a < 0) {
-                int top = st.pop();
-                if (Math.abs(a) == top) {
+        for( int a: asteroids){
+            while(!st.isEmpty() && a < 0 && st.peek()>0){
+                if(a+st.peek() < 0){
+                    st.pop();
+                }else if(a+st.peek() > 0){
                     a = 0;
-                    break;
-                } else if (Math.abs(a) < top) {
-                    a = top; 
+                }else{
+                    a = 0;
+                    st.pop();
                 }
             }
 
-            if (a != 0) {
-                st.push(a);
+            if(a != 0){
+              st.push(a);
             }
         }
 
-         int[] result = new int[st.size()];
-        for (int i = result.length - 1; i >= 0; i--) {
-            result[i] = st.pop();
+        int[] res = new int[st.size()];
+        int index = 0;
+        for(int i : st){
+            res[index++] = i;
         }
-        return result;
+
+        return res;
+        
     }
 }
