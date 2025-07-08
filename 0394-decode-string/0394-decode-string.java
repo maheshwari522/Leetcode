@@ -1,29 +1,48 @@
 class Solution {
     public String decodeString(String s) {
-          Stack<Pair<String, Integer>> stack = new Stack<>();
-        StringBuilder currentString = new StringBuilder();
-        int num = 0;
 
-        for (char c : s.toCharArray()) {
-            if (Character.isDigit(c)) {
-                num = num * 10 + (c - '0');
-            } else if (c == '[') {
-                stack.push(new Pair<>(currentString.toString(), num));
-                currentString.setLength(0);
-                num = 0;
-            } else if (c == ']') {
-                Pair<String, Integer> last = stack.pop();
-                StringBuilder temp = new StringBuilder(last.getKey());
-                for (int i = 0; i < last.getValue(); i++) {
-                    temp.append(currentString);
+        Stack<Character> st = new Stack<>();
+
+        for(char c:s.toCharArray()){
+            if(c != (']')){
+                st.push(c);
+            
+            }else{
+                StringBuilder sb = new StringBuilder();
+                while(st.peek() != '['){
+                    sb.insert(0,st.pop());
                 }
-                currentString = temp;
-            } else {
-                currentString.append(c);
+                String sub = sb.toString();
+                st.pop();
+
+                sb = new StringBuilder();
+                while(!st.isEmpty() && Character.isDigit(st.peek())){
+                    sb.insert(0,st.pop());
+                }
+
+                int count = Integer.valueOf(sb.toString());
+
+                while(count > 0){
+                    for(char ch:sub.toCharArray()){
+                        st.push(ch);
+                    }
+
+                    count--;
+
+                }
+
+
             }
         }
 
-        return currentString.toString();
+        StringBuilder res = new StringBuilder();
+
+        while(!st.isEmpty()){
+            res.insert(0,st.pop());
+
+        }
+
+        return res.toString();
         
     }
 }
