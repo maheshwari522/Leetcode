@@ -7,31 +7,25 @@
  *     TreeNode() {}
  *     TreeNode(int val) { this.val = val; }
  *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
+ *         this.val = val; *         this.left = left; *         this.right = right;
  *     }
  * }
  */
 class Solution {
     public List<Integer> preorderTraversal(TreeNode root) {
-
         List<Integer> res = new ArrayList<>();
-
-        predorderTraverse(root,res);
-
+       
+         preOrderT(res,root);
+  
         return res;
-        
     }
 
-    public void predorderTraverse(TreeNode root,List<Integer> res){
-
-        if(root == null){
+    public void preOrderT(List<Integer> res,TreeNode current){
+        if(current == null){
             return;
         }
-        res.add(root.val);
-        predorderTraverse(root.left,res);
-        predorderTraverse(root.right,res);
-
+        res.add(current.val);
+        preOrderT(res,current.left);
+        preOrderT(res,current.right);
     }
 }
