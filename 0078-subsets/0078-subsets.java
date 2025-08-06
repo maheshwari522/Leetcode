@@ -1,34 +1,28 @@
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
+    
+    List<List<Integer>> res = new ArrayList<>();
 
+    List<Integer> current = new ArrayList<>();
 
-        List<List<Integer>> ans = new ArrayList<>();
+    backtrack(nums, 0, current, res,nums.length);
 
-        List<Integer> curr = new ArrayList<>();
-
-
-        helper(0,nums, nums.length, curr, ans);
-
-        return ans;
-
-
-        
+        return res;
     }
 
+    public void backtrack(int[] nums, int index,List<Integer> current, List<List<Integer>> res, int n){
 
-     public void helper(int startIndex,int[] nums,int n, List<Integer> curr, List<List<Integer>> ans){
-        if(startIndex == n){
-                ans.add(new ArrayList<>(curr));
-
+        
+        if(index == n){
+            res.add(new ArrayList<>(current));
             return;
         }
+        
+        current.add(nums[index]);
+       // System.out.println(current.get(index));
+        backtrack(nums, index+1,current, res,n);
+        current.remove(current.size()-1);
+        backtrack(nums, index+1,current, res,n);
 
-        curr.add(nums[startIndex]);
-        helper(startIndex+1,nums, n, curr, ans);
-        curr.remove(curr.size()-1);
-
-        helper(startIndex+1,nums, n, curr, ans);
-     }
-
-
+    }
 }
