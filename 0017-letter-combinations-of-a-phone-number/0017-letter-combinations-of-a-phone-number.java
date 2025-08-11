@@ -1,42 +1,35 @@
 class Solution {
     public List<String> letterCombinations(String digits) {
+if(digits == "" || digits == null || digits.length() ==0){
+    return new ArrayList<>();
+}
 
-String[] letters = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+    List<String> ans = new ArrayList<>();
 
-        if(digits == null || digits == "") return new ArrayList<>();
+    String[] letters = new String[]{"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
 
-        List<String> ans = new ArrayList();
-       
-        if (digits == null || digits.length() == 0) {
-            return ans;
+   
+ String sb = "";
+    backtrack(0,digits,letters,sb,ans);
+
+    return ans;
+        
+    }
+
+    public void backtrack(int start, String digits,String[] letters,String sb,List<String> ans){
+        if(sb.length() == digits.length()){
+            ans.add(sb);
+            return;
         }
+
+
+        String currentLetters = letters[digits.charAt(start)-'0'];
+
+        for(int i = 0;i<currentLetters.length();i++){
+            String newres = sb+currentLetters.charAt(i);
+            backtrack(start+1,digits,letters,newres,ans);
+        }
+
         
-
-          backtrack(0,letters,ans,"",digits);
-
-
-        
-
-        return ans;
-        
-    }
-public void backtrack(int start,String[] letters,List<String> ans, String result,String digits){
-
-
-    if(start == digits.length()){
-    ans.add(result);
-    return;
-    }
-    String currentLetter = letters[digits.charAt(start)-'0'];
-    
-     for(int i=0;i<currentLetter.length();i++){
-
-        String newresult = result+ currentLetter.charAt(i);
-        backtrack(start+1,letters,ans,newresult,digits);
-        
-
-
-     }
-
     }
 }
