@@ -9,7 +9,7 @@ class Solution {
         int cols = grid[0].length;
         int count = 0;
       
-
+        //starting dfs
         for(int i = 0;i< rows;i++){
             for(int j = 0;j<cols ;j++){
                 if(grid[i][j] == '1'){
@@ -27,10 +27,11 @@ class Solution {
     }
 
     public void startDFS(char[][] grid,int i,int j,int rows, int cols){
-            
+            //checking boundaries and if value is 0 then return otherwise go in depth
             if(i<0 || i>= rows || j<0 || j>=cols ||  grid[i][j] == '0') return;
            
             if(grid[i][j] == '1'){
+                //mark current as 0
             grid[i][j] = '0';
             startDFS(grid,i+1,j,rows,cols);
             startDFS(grid,i-1,j,rows,cols);
