@@ -6,8 +6,8 @@ class Solution {
 
         int[][] visited = new int[rowlength][collength];
 
-        int[] dx = {-1,0,1,0};
-        int[] dy = {0,1,0,-1};
+       // int[] dx = {-1,0,1,0};
+       /// int[] dy = {0,1,0,-1};
 
     
         //first row
@@ -23,6 +23,8 @@ class Solution {
 
         for(int k=0;k<visited.length;k++){
             for(int r = 0; r< visited[0].length;r++){
+
+                System.out.println(visited[k][r]);
                 if(visited[k][r] !=1 ){
                     board[k][r] = 'X';
                 }
