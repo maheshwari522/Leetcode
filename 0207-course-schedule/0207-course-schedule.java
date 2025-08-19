@@ -1,58 +1,52 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
 
+      List<List<Integer>> adj = new ArrayList<>();
 
-        //create adjacescy matrix
+      int[] indegree = new int[numCourses];
 
-        List<List<Integer>> adj = new ArrayList();
+      for(int i=0;i<numCourses;i++){
+        adj.add(new ArrayList<>());
 
-        //create indegree no of edges incoming
+      }
 
-        int[] indegree = new int[numCourses];
+      for(int[] prereq :prerequisites ){
+        int course = prereq[0];
+        int pre = prereq[1];
+        adj.get(pre).add(course);
+        indegree[course]++;
+      }
 
-        for(int i =0;i< numCourses;i++){
-            adj.add(new ArrayList());
-
-
+      Queue<Integer> q = new LinkedList<>();
+      for(int i =0;i<numCourses;i++){
+        if(indegree[i] == 0){
+            q.offer(i);
         }
 
+      }
 
-        for(int[] preq : prerequisites){
-            int course = preq[0];
-            int prereq = preq[1];
+      List<Integer> res = new ArrayList<>();
 
-            adj.get(prereq).add(course);
-            indegree[course]++;
-
-
-        }
-
-
-        Queue<Integer> q = new LinkedList<>();
-
-        for(int i = 0;i<numCourses;i++){
-            if(indegree[i] == 0){
-                q.offer(i);
+      while(!q.isEmpty()){
+        int current = q.poll();
+        res.add(current);
+        for(int n : adj.get(current)){
+            indegree[n]--;
+            if(indegree[n]==0){
+                q.offer(n);
             }
+
+
         }
 
-        List<Integer> ans = new ArrayList<>();
+      }
 
-        while(!q.isEmpty()){
-            int current = q.poll();
-            ans.add(current);
-
-            for(int n :adj.get(current)){
-                indegree[n]--;
-
-                if(indegree[n] == 0){
-                    q.offer(n);
-                }
-            }
-        }
+      return res.size() == numCourses;
 
 
 
-        return ans.size() == numCourses;
+
+
+        
     }
 }
