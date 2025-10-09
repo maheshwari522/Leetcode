@@ -1,44 +1,41 @@
 class ListNode{
     int key;
     int val;
-    ListNode next;
     ListNode prev;
+    ListNode next;
 
-    public ListNode(int key,int val){
+    ListNode(int key, int val){
         this.key = key;
-        this.val =val;
-        this.next = null;
+        this.val = val;
         this.prev = null;
-
+        this.next = null;   
     }
 }
 
 class LRUCache {
-
     int capacity;
-    HashMap<Integer,ListNode> mp;
+    Map<Integer,ListNode> map;
     ListNode left;
     ListNode right;
-
-    public LRUCache(int capacity) {
+    
+     public LRUCache(int capacity) {
 
         this.capacity = capacity;
-        this.mp = new HashMap<>();
+        this.map = new HashMap<>();
         this.left = new ListNode(0,0);
         this.right = new ListNode(0,0);
         this.left.next = right;
-        this.right.prev = left;
-
+        this.right.prev = left;       
     }
 
     public void remove(ListNode node){
         ListNode prev = node.prev;
-        ListNode nxt = node.next;
-        prev.next = nxt;
+        ListNode next = node.next;
+        prev.next = next;
         prev.next.prev = prev;
 
-
     }
+
     public void insert(ListNode node){
         ListNode prev = right.prev;
         prev.next = node;
@@ -49,31 +46,40 @@ class LRUCache {
     }
     
     public int get(int key) {
-        if(mp.containsKey(key)){
-            ListNode node = mp.get(key);
+        if(map.containsKey(key)){
+            ListNode node = map.get(key);
             remove(node);
             insert(node);
             return node.val;
+
+
         }
         return -1;
+      
         
     }
-
     
     public void put(int key, int value) {
 
-        if(mp.containsKey(key)){
-            remove(mp.get(key));
+        if(map.containsKey(key)){
+            remove(map.get(key));
         }
-        ListNode newNode = new ListNode(key,value);
-        mp.put(key,newNode);
-        insert(newNode);
+        ListNode newnode =new ListNode(key,value);
+        map.put(key,newnode);
+        insert(newnode);
 
-        if(mp.size()>capacity){
+        if(map.size()>capacity){
             ListNode lru = left.next;
             remove(lru);
-            mp.remove(lru.key);
+            map.remove(lru.key);
         }
         
     }
 }
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
