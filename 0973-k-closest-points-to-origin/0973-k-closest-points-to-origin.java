@@ -11,14 +11,12 @@ class Solution {
         }
 
         int[][] res = new int[k][2];
-        int index = 0;
+       
 
-        while(k>0){
-            int [] closest = minHeap.poll();
-            int[] point = new int[]{closest[1],closest[2]};
-            res[index++] = point;
-            k--; 
-        }
+       for(int i = 0;i<k;i++){
+        int[] point = minHeap.poll();
+        res[i] = new int[]{point[1],point[2]};
+       }
 
         return res;
         
