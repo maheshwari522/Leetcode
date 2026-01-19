@@ -10,51 +10,50 @@
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-
-        if(lists == null || lists.length == 0){
-            return null;
-        }
-
-        while(lists.length>1){
-            List<ListNode> mergedList = new ArrayList<>();
-            for(int i = 0;i<lists.length;i = i+2){
-                ListNode l1 = lists[i];
-                ListNode l2 = (i+1) < lists.length ? lists[i+1]:null;
-                mergedList.add(mergeList(l1,l2));
-                
-              
-            }
-            lists= mergedList.toArray(new ListNode[0]);
-
-        }
-        return lists[0];
         
+        ListNode merged = new ListNode(Integer.MIN_VALUE);
+        for(ListNode li:lists){
+            if(li!=null){
+               merged =  merge(merged,li );
+            }
+        }
+
+        return merged.next;
     }
 
-    public ListNode mergeList(ListNode l1,ListNode l2){
-        ListNode dummy = new ListNode(0);
-        ListNode current = dummy;
-        while(l1!=null && l2!=null){
-            if(l1.val<l2.val){
-                current.next = l1;
-                l1 = l1.next;
+    public ListNode merge(ListNode li1, ListNode li2){
+        ListNode dummy = new ListNode(-1);
+        ListNode current=dummy;
+        ListNode p1= li1;
+        ListNode p2= li2;
+        while(p1!=null && p2!=null){
+            if(p1.val<p2.val){
+                current.next = p1;
+                p1 = p1.next;
             }else{
-                current.next = l2;
-                l2 = l2.next;
-
+                current.next = p2;
+                p2 = p2.next;
             }
             current = current.next;
         }
+        if(p1!=null){
+            while(p1!=null){
+            current.next=p1;
+            p1=p1.next;
+            current=current.next;
+            }
 
-        if(l1!=null){
-            current.next = l1;
+
         }
-        if(l2!=null){
-            current.next =l2;
+        if(p2!=null){
+            while(p2!=null){
+            current.next=p2;
+            p2=p2.next;
+            current=current.next;
+            }
+
         }
 
         return dummy.next;
-
-
     }
 }
