@@ -1,74 +1,90 @@
 class Twitter {
     int timeStamp;
-    private Map<Integer,Set<Integer>> userMap;
-    private Map<Integer,List<int[]>> tweetmap;
+    HashMap<Integer, User> userMap;
+
+    class User {
+        int UserId;
+        HashSet<Integer> followees;
+        List<Tweet> tweets;
+
+        public User(int userId) {
+            this.UserId = userId;
+            this.followees = new HashSet<>();
+            this.tweets = new ArrayList<>();
+        }
+    }
+
+    class Tweet {
+        int tweetId;
+        int time;
+
+        public Tweet(int tweetId, int time) {
+            this.tweetId = tweetId;
+            this.time = time;
+        }
+    }
 
     public Twitter() {
-        timeStamp = 0;
         userMap = new HashMap<>();
-        tweetmap = new HashMap<>();
     }
-    
+
     public void postTweet(int userId, int tweetId) {
-
-        timeStamp++;
-        tweetmap.putIfAbsent(userId,new ArrayList<>());
-        tweetmap.get(userId).add(new int[]{timeStamp,tweetId});
-        
-        
-    }
-        public List<Integer> getNewsFeed(int userId) {
-
-        List<int[]> newsFeed = new ArrayList<>(tweetmap.getOrDefault(userId,new ArrayList<>()));
-
-        for(int followeeId : userMap.getOrDefault(userId,new HashSet<>())){
-
-            newsFeed.addAll(tweetmap.getOrDefault(followeeId,new ArrayList<>()));
-
-            
-
+        Tweet newTweet = new Tweet(tweetId, timeStamp++);
+        if (userMap.containsKey(userId)) {
+            userMap.get(userId).tweets.add(newTweet);
+        } else {
+            User newUser = new User(userId);
+            newUser.followees.add(userId);
+            newUser.tweets.add(newTweet);
+            userMap.put(userId, newUser);
         }
-
-        newsFeed.sort((a,b) -> b[0] - a[0]);
-
-        List<Integer> res = new ArrayList<>();
-
-        for(int i = 0;i<Math.min(10,newsFeed.size());i++){
-            res.add(newsFeed.get(i)[1]);
-        }
-
-        return res;
-
-
-
-        
-        
     }
-    
+
+    public List<Integer> getNewsFeed(int userId) {
+        List<Integer> result = new ArrayList<>();
+        PriorityQueue<Tweet> pq = new PriorityQueue<>((a, b) -> a.time - b.time);
+        if (!userMap.containsKey(userId)) return result;
+        User user = userMap.get(userId);
+        HashSet<Integer> followees = user.followees;
+        if (followees != null) {
+            for (Integer followee : followees) {
+                List<Tweet> tweets = userMap.get(followee).tweets;
+                if (tweets != null) {
+                    for (int i = tweets.size() - 1; i >= tweets.size() - 10 && i >= 0; i--) {
+                        Tweet tweet = tweets.get(i);
+                        pq.add(tweet);
+                        if (pq.size() > 10) {
+                            pq.poll();
+                        }
+                    }
+                }
+            }
+        }
+        while (!pq.isEmpty()) {
+            result.add(0, pq.poll().tweetId);
+        }
+        return result;
+    }
+
     public void follow(int followerId, int followeeId) {
-
-        userMap.putIfAbsent(followerId, new HashSet<>());
-        userMap.get(followerId).add(followeeId);
-        
-    }
-    
-    public void unfollow(int followerId, int followeeId) {
-
-        Set<Integer> folowees = userMap.get(followerId);
-        if(folowees!=null){
-        folowees.remove(followeeId);
+        if (!userMap.containsKey(followerId)) {
+            User newUser = new User(followerId);
+            newUser.followees.add(followeeId);
+            userMap.put(followerId, newUser);
+        } else {
+            userMap.get(followerId).followees.add(followerId);
+            userMap.get(followerId).followees.add(followeeId);
         }
 
+        if (!userMap.containsKey(followeeId)) {
+            User newUser = new User(followeeId);
+            userMap.put(followeeId, newUser);
+        }
+    }
 
-        
+    public void unfollow(int followerId, int followeeId) {
+        if (userMap.containsKey(followerId)) {
+            userMap.get(followerId).followees.remove(followeeId);
+        }
     }
 }
-
-/**
- * Your Twitter object will be instantiated and called as such:
- * Twitter obj = new Twitter();
- * obj.postTweet(userId,tweetId);
- * List<Integer> param_2 = obj.getNewsFeed(userId);
- * obj.follow(followerId,followeeId);
- * obj.unfollow(followerId,followeeId);
- */
