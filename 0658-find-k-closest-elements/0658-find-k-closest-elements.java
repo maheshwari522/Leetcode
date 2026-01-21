@@ -6,20 +6,15 @@ class Solution {
            if (diffA != diffB) {
                return diffB - diffA;
            }
-           return a - b;
+           return b - a;
         });
         List<Integer> res = new ArrayList<>();
-        for(int i=0;i<k;i++){
-            int diff = arr[i]-x;
-            
-            maxHeap.add(arr[i]);
     
-        }
-        for(int j = k;j<arr.length;j++){
-            int diff = arr[j]-x;
-            if(Math.abs(maxHeap.peek()-x)>diff){
+        for(int j = 0;j<arr.length;j++){
+           
+            
             maxHeap.add(arr[j]);
-            }
+            
             if(maxHeap.size()>k){
                 maxHeap.poll();
             }
