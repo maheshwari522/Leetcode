@@ -1,30 +1,52 @@
 class Solution {
     public int[] intersection(int[] nums1, int[] nums2) {
-
-        Set<Integer> set = new HashSet<>();
-        int i = 0;
-        int j =0;
+        int m = nums1.length;
+        int n = nums2.length;
+        List<Integer> res = new ArrayList<>();
         Arrays.sort(nums1);
         Arrays.sort(nums2);
-        while(i< nums1.length && j<nums2.length){
-            if(nums1[i] == nums2[j]){
-                set.add(nums1[i]);
-                i++;
-                j++;
-            }else if(nums1[i]<nums2[j]){
-                i++;
-            }else{
-                j++;
+        if(m>n) return intersection(nums2,nums1);
+        int low = 0;
+        int high = n-1;
+
+        for(int i = 0;i<m;i++){
+            int target = nums1[i];
+            if(i>0 && nums1[i] == nums1[i-1])continue;
+
+            int bsIdx = binarySearch(target,nums2,low,high);
+            if(bsIdx !=-1){
+                res.add(target);
+                low = bsIdx+1;
             }
         }
 
-        int[] res = new int[set.size()];
-        int idx = 0;
-        for(int k:set){
-            res[idx++] = k;
+        int[] result = new int[res.size()];
+        for(int i=0;i<res.size();i++){
+            result[i] = res.get(i);
         }
 
-        return res;
+        return result;
         
+    }
+
+    public int binarySearch(int target, int[] nums, int low,int high){
+        while(low<=high){
+            int mid = low+(high-low)/2;
+
+            if(nums[mid] == target){
+              if(mid == low || nums[mid]!=nums[mid-1]){
+                return mid;
+              }else{
+                high = mid-1;
+              }
+
+            }else if(nums[mid]<target){
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+
+        return -1;
     }
 }
