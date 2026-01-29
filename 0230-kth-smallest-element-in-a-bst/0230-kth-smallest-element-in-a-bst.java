@@ -7,32 +7,36 @@
  *     TreeNode() {}
  *     TreeNode(int val) { this.val = val; }
  *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;e *         this.left = left;
+ *         this.val = val;
+ *         this.left = left;
  *         this.right = right;
  *     }
  * }
  */
+ //TC:O(n)
+ //SC:O(h)
 class Solution {
-    List<Integer> l = new ArrayList<>();
-    int index = 0;
+    Integer result;
+    int count;
     public int kthSmallest(TreeNode root, int k) {
-        index = k;
-        return getL(root);
+        inOrder(root,k);
+
+        return result;
+
+
+    }
+    private void inOrder(TreeNode root,int k){
+        if(root == null) return;
+        if(result != null) return;
         
-    }
-
-    public int getL(TreeNode root){
-        if(root == null) return -1;
-        int left = getL(root.left);
-        if(left!=-1){
-            return left;
+        
+        inOrder(root.left,k);
+        count++;
+        
+        if(k==count){
+            result = root.val;
+            
         }
-        l.add(root.val);
-        if(l.size() == index)
-        return l.get(index-1);
-
-        return getL(root.right);
-
+        inOrder(root.right,k);
     }
-
 }
