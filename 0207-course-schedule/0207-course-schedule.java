@@ -1,50 +1,44 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-
-      List<List<Integer>> adj = new ArrayList<>();
-
-      int[] indegree = new int[numCourses];
-
-      for(int i=0;i<numCourses;i++){
-        adj.add(new ArrayList<>());
-
-      }
-
-      for(int[] prereq :prerequisites ){
-        int course = prereq[0];
-        int pre = prereq[1];
-        adj.get(pre).add(course);
-        indegree[course]++;
-      }
-
-      Queue<Integer> q = new LinkedList<>();
-      for(int i =0;i<numCourses;i++){
-        if(indegree[i] == 0){
-            q.offer(i);
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        int[] indegree = new int[numCourses];
+        for(int[] pre : prerequisites){
+            int prereq = pre[1];
+            int course = pre[0];
+            map.putIfAbsent(prereq,new ArrayList<>());
+            map.get(prereq).add(course);
+            indegree[course]++;
         }
 
-      }
+        int count=0;
+        Queue<Integer> q = new LinkedList<>();
 
-      List<Integer> res = new ArrayList<>();
-
-      while(!q.isEmpty()){
-        int current = q.poll();
-        res.add(current);
-        for(int n : adj.get(current)){
-            indegree[n]--;
-            if(indegree[n]==0){
-                q.offer(n);
+        for(int i = 0;i<numCourses;i++){
+            if(indegree[i] == 0){
+                q.offer(i);
+                count++;
             }
-
-
         }
 
-      }
+        if(q.isEmpty()) return false;
+        if(count == numCourses) return true;
 
-      return res.size() == numCourses;
+        while(!q.isEmpty()){
+            int curr = q.poll();
+            List<Integer> dependencies = map.get(curr);
+            if(dependencies != null){
+                for(int dependent : dependencies){
+                    indegree[dependent]--;
+                    if(indegree[dependent] == 0){
+                        q.add(dependent);
+                        count++;
+                        if(count == numCourses) return true;
+                    }
+                }
+            }
+        }
 
-
-
+        return false;
 
 
         
